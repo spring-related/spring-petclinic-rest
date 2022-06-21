@@ -1,4 +1,6 @@
-# REST version of Spring PetClinic Sample Application (spring-framework-petclinic extend ) [![Build Status](https://travis-ci.org/spring-petclinic/spring-petclinic-rest.png?branch=master)](https://travis-ci.org/spring-petclinic/spring-petclinic-rest/)
+# REST version of Spring PetClinic Sample Application (spring-framework-petclinic extend ) 
+
+[![Build Status](https://github.com/spring-petclinic/spring-petclinic-rest/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-petclinic/spring-petclinic-rest/actions/workflows/maven-build.yml)
 
 This backend version of the Spring Petclinic application only provides a REST API. **There is no UI**.
 The [spring-petclinic-angular project](https://github.com/spring-petclinic/spring-petclinic-angular) is a Angular front-end application which consumes the REST API.
@@ -27,8 +29,16 @@ docker run -p 9966:9966 springcommunity/spring-petclinic-rest
 
 You can then access petclinic here: [http://localhost:9966/petclinic/](http://localhost:9966/petclinic/)
 
-## Swagger REST API documentation presented here (after application start):
-[http://localhost:9966/petclinic/swagger-ui.html](http://localhost:9966/petclinic/swagger-ui.html)
+There are actuator health check and info routes as well: 
+* [http://localhost:9966/petclinic/actuator/health](http://localhost:9966/petclinic/actuator/health)
+* [http://localhost:9966/petclinic/actuator/info](http://localhost:9966/petclinic/actuator/info)
+
+## OpenAPI REST API documentation presented here (after application start):
+
+You can reach the swagger UI with this URL
+[http://localhost:9966/petclinic/](http://localhost:9966/petclinic/swagger-ui.html).
+
+You then can get the Open API description reaching this URL [localhost:9966/petclinic/v3/api-docs](localhost:9966/petclinic/v3/api-docs).
 
 ## Screenshot of the Angular client
 
@@ -91,6 +101,39 @@ You may also start a Postgres database with docker:
 ```
 docker run --name postgres-petclinic -e POSTGRES_PASSWORD=petclinic -e POSTGRES_DB=petclinic -p 5432:5432 -d postgres:9.6.0
 ```
+## API First Approach
+
+This API is built following some [API First approach principles](https://swagger.io/resources/articles/adopting-an-api-first-approach/).
+
+It is specified through the [OpenAPI](https://oai.github.io/Documentation/).
+It is specified in this [file](./src/main/resources/openapi.yml).
+
+Some of the required classes are generated during the build time. 
+Here are the generated file types:
+* DTOs
+* API template interfaces specifying methods to override in the controllers
+
+To see how to get them generated you can read the next chapter. 
+
+## Generated code
+
+Some of the required classes are generated during the build time using maven or any IDE (e.g., IntelliJ Idea or Eclipse).
+
+All of these classes are generated into the ``target/generated-sources`` folder.
+
+Here is a list of the generated packages and the corresponding tooling:
+
+| Package name                                   | Tool             |
+|------------------------------------------------|------------------|
+| org.springframework.samples.petclinic.mapper   | [MapStruct](https://mapstruct.org/)        |
+| org.springframework.samples.petclinic.rest.dto | [OpenAPI Generator maven plugin](https://github.com/OpenAPITools/openapi-generator/) |
+
+
+To get both, you have to run the following command:
+
+```jshelllanguage
+mvn clean install
+```
 
 ## Security configuration
 In its default configuration, Petclinic doesn't have authentication and authorization enabled.
@@ -131,7 +174,7 @@ The following items should be installed in your system:
 
 Note: when m2e is available, there is an m2 icon in Help -> About dialog.
 If m2e is not there, just follow the install process here: http://eclipse.org/m2e/download/
-
+* Eclipse with the [mapstruct plugin](https://mapstruct.org/documentation/ide-support/) installed.
 
 ### Steps:
 
